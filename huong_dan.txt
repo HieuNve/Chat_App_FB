@@ -1,0 +1,33 @@
+fix lỗi không đăng nhập được fb
+Facebook đã phát hiện chat-app không sử dụng kết nối bảo mật để truyền thông tin.
+Chỉ khi nào chat-app cập nhật cài đặt bảo mật thì bạn mới có thể đăng nhập vào ứng dụng này qua Facebook."
+
+Nguyên nhân: Do localhost không có ssl nên Facebook cảnh báo là kết nối không bảo mật 
+Cách khắc phục: Các bạn thêm ssl cho localhost theo hướng dẫn ở đây:
+
+B1. Cài đặt mkcert tool
+Tham khảo link mkcert (https://github.com/FiloSottile/mkcert) để cài đặt cho từng hệ điều hành
+Trên Windows, sử dụng Chocolatey (https://chocolatey.org/)
+choco install mkcert
+
+B2. Thiết lập mkcert trên máy tính của bạn (Tạo một CA)
+mkcert -install
+
+B3. Vào thư mục gốc của dự án, tạo thư mục .cert nếu chưa có
+mkdir -p .cert
+
+B4. Tạo một certificate (chạy từ thư mục root của dự án)
+mkcert -key-file ./.cert/key.pem -cert-file ./.cert/cert.pem "localhost"
+
+B5. Cập nhật lại start script trong package.json thành 
+ "start": "set HTTPS=true&&set SSL_CRT_FILE=./.cert/cert.pem SSL_KEY_FILE=./.cert/key.pem&&react-scripts start"
+
+B6. Chạy lệnh npm run start để mở localhost.
+
+link : https://www.youtube.com/watch?v=YZhNUU4_Pjw&t=6109s
+
+install thư viện : npm install --save antd @ant-design/icons date-fns firebase lodash react-router-dom styled-components
+
+chạy 2 câu lệnh này
+set HTTPS=true&&npm start
+ firebase emulators:start
